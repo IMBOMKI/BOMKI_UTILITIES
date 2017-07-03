@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[      7671,        203]
-NotebookOptionsPosition[      7256,        183]
-NotebookOutlinePosition[      7595,        198]
-CellTagsIndexPosition[      7552,        195]
+NotebookDataLength[     20031,        468]
+NotebookOptionsPosition[     19535,        446]
+NotebookOutlinePosition[     19870,        461]
+CellTagsIndexPosition[     19827,        458]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -29,8 +29,68 @@ Cell[BoxData[
  CellChangeTimes->{
   3.707096865991557*^9, 3.70709914983666*^9, {3.707099183919558*^9, 
    3.707099210082642*^9}, 3.707113934882453*^9, {3.7071144728934813`*^9, 
-   3.707114484355448*^9}}]
+   3.707114484355448*^9}, {3.707972913015937*^9, 3.707972931228691*^9}, 
+   3.707975369747224*^9, 3.7079779838558702`*^9, 3.7079794851847553`*^9, 
+   3.708029348340043*^9, 3.7080339532576942`*^9}]
 }, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{"(*", 
+   RowBox[{
+    RowBox[{"Nb", "=", "i"}], ";", "\[IndentingNewLine]", 
+    RowBox[{"Obs", " ", "=", " ", "Nb"}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"f", "[", 
+      RowBox[{"r_", ",", "x_"}], "]"}], ":=", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x", "+", "Nb"}], ")"}], "^", "r"}], " ", "*", " ", 
+      RowBox[{
+       RowBox[{"\[ExponentialE]", "^", 
+        RowBox[{"(", 
+         RowBox[{"-", 
+          RowBox[{"(", 
+           RowBox[{"x", "+", "Nb"}], ")"}]}], ")"}]}], "/", 
+       RowBox[{"r", "!"}]}]}]}], ";", "\[IndentingNewLine]", 
+    RowBox[{
+     RowBox[{"g", "[", 
+      RowBox[{"r_", ",", "xup_"}], "]"}], ":=", 
+     RowBox[{"Integrate", "[", 
+      RowBox[{
+       RowBox[{"f", "[", 
+        RowBox[{"r", ",", "x"}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}]}], ";", 
+    "\[IndentingNewLine]", 
+    RowBox[{"Print", "[", 
+     RowBox[{"xroot", " ", "=", " ", 
+      RowBox[{"xup", " ", "/.", " ", 
+       RowBox[{"FindRoot", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{
+           RowBox[{"Integrate", "[", 
+            RowBox[{
+             RowBox[{"f", "[", 
+              RowBox[{"Obs", ",", "x"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
+           RowBox[{"Integrate", "[", 
+            RowBox[{
+             RowBox[{"f", "[", 
+              RowBox[{"Obs", ",", "x"}], "]"}], ",", 
+             RowBox[{"{", 
+              RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], "-",
+           "0.90"}], ",", 
+         RowBox[{"{", 
+          RowBox[{"xup", ",", "0", ",", "20"}], "}"}], ",", 
+         RowBox[{"MaxIterations", "\[Rule]", "1000"}], ",", " ", 
+         RowBox[{"AccuracyGoal", "\[Rule]", "Automatic"}], ",", 
+         RowBox[{"PrecisionGoal", "->", "10"}]}], "]"}]}]}], "]"}]}], 
+   "*)"}]}]], "Input",
+ CellChangeTimes->{{3.707973171532422*^9, 3.707973172049811*^9}}],
 
 Cell[CellGroupData[{
 
@@ -38,18 +98,9 @@ Cell[BoxData[
  RowBox[{"\[IndentingNewLine]", 
   RowBox[{
    RowBox[{
-    RowBox[{"Nb", "=", "10.0"}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{"(*", 
-    RowBox[{
-     RowBox[{"Obs", " ", "=", " ", 
-      RowBox[{"Floor", "[", "Nb", "]"}]}], ";"}], "*)"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Obs", " ", "=", " ", "11"}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{
     RowBox[{
      RowBox[{"f", "[", 
-      RowBox[{"r_", ",", "x_"}], "]"}], ":=", 
+      RowBox[{"r_", ",", "x_", ",", "Nb_"}], "]"}], ":=", 
      RowBox[{
       RowBox[{
        RowBox[{"(", 
@@ -64,83 +115,176 @@ Cell[BoxData[
    RowBox[{
     RowBox[{
      RowBox[{"g", "[", 
-      RowBox[{"r_", ",", "xup_"}], "]"}], ":=", 
+      RowBox[{"r_", ",", "Nb_", ",", " ", "xup_"}], "]"}], ":=", 
      RowBox[{"Integrate", "[", 
       RowBox[{
        RowBox[{"f", "[", 
-        RowBox[{"r", ",", "x"}], "]"}], ",", 
+        RowBox[{"r", ",", "x", ",", "Nb"}], "]"}], ",", 
        RowBox[{"{", 
         RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}]}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{"(*", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"LSuperFine", "=", 
     RowBox[{
+     RowBox[{"Table", "[", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"i", "*", "10"}], "\[NotEqual]", 
+          RowBox[{"Floor", "[", 
+           RowBox[{"i", "*", "10"}], "]"}]}], ",", "\[IndentingNewLine]", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"xup", " ", "/.", " ", 
+            RowBox[{"FindRoot", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}],
+                "-", "0.90"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"xup", ",", "0", ",", "20"}], "}"}]}], "]"}]}]}], 
+          "}"}]}], "]"}], "\[IndentingNewLine]", ",", 
+       RowBox[{"{", 
+        RowBox[{"i", ",", "0.0", ",", "0.4", ",", "0.01"}], "}"}]}], "]"}], "/.", 
+     RowBox[{"Null", "\[Rule]", 
+      RowBox[{"Sequence", "[", "]"}]}]}]}], "\[IndentingNewLine]", 
+   RowBox[{"Export", "[", 
+    RowBox[{
+    "\"\</home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_analysis/\
+v999/utilities/Mathematica/SuperFine.dat\>\"", ",", "LSuperFine"}], "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"(*", "\[IndentingNewLine]", 
+    RowBox[{"LInt50", "=", 
      RowBox[{
-      RowBox[{"Integrate", "[", 
-       RowBox[{
-        RowBox[{"f", "[", 
-         RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-        RowBox[{"{", 
-         RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
-      RowBox[{"NIntegrate", "[", 
-       RowBox[{
-        RowBox[{"f", "[", 
-         RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-        RowBox[{"{", 
-         RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], 
-     "\[Equal]", "0.9"}], "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"xroot", " ", "=", " ", 
-    RowBox[{"xup", " ", "/.", " ", 
-     RowBox[{"FindRoot", "[", 
       RowBox[{
-       RowBox[{
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
         RowBox[{
-         RowBox[{"Integrate", "[", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"xup", " ", "/.", " ", 
+            RowBox[{"FindRoot", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}],
+                "-", "0.90"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"xup", ",", "0", ",", "20"}], "}"}]}], "]"}]}]}], 
+          "}"}], "\[IndentingNewLine]", ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "0", ",", "50", ",", "1"}], "}"}]}], "]"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"Export", "[", 
+        RowBox[{
+        "\"\</home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_analysis/\
+v999/utilities/Mathematica/Integer50.dat\>\"", ",", "LInt50"}], "]"}], 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", "LFine"}], "=", 
+      RowBox[{
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"If", "[", 
           RowBox[{
-           RowBox[{"f", "[", 
-            RowBox[{"Obs", ",", "x"}], "]"}], ",", 
+           RowBox[{"i", "\[NotEqual]", 
+            RowBox[{"Floor", "[", "i", "]"}]}], ",", "\[IndentingNewLine]", 
            RowBox[{"{", 
-            RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
-         RowBox[{"Integrate", "[", 
+            RowBox[{"i", ",", 
+             RowBox[{"xup", " ", "/.", " ", 
+              RowBox[{"FindRoot", "[", 
+               RowBox[{
+                RowBox[{
+                 RowBox[{
+                  RowBox[{"Integrate", "[", 
+                   RowBox[{
+                    RowBox[{"f", "[", 
+                    RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
+                  
+                  RowBox[{"Integrate", "[", 
+                   RowBox[{
+                    RowBox[{"f", "[", 
+                    RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                    RowBox[{"{", 
+                    RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], 
+                   "]"}]}], "-", "0.90"}], ",", 
+                RowBox[{"{", 
+                 RowBox[{"xup", ",", "0", ",", "20"}], "}"}]}], "]"}]}]}], 
+            "}"}]}], "]"}], "\[IndentingNewLine]", ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "0.0", ",", "20.0", ",", "0.1"}], "}"}]}], "]"}], 
+       "/.", 
+       RowBox[{"Null", "\[Rule]", 
+        RowBox[{
+         RowBox[{"Sequence", "[", "]"}], "\[IndentingNewLine]", 
+         RowBox[{"Export", "[", 
           RowBox[{
-           RowBox[{"f", "[", 
-            RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-           RowBox[{"{", 
-            RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], "-", 
-        "0.90"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"xup", ",", "0", ",", "20"}], "}"}], ",", 
-       RowBox[{"MaxIterations", "\[Rule]", "1000"}], ",", " ", 
-       RowBox[{"AccuracyGoal", "\[Rule]", "Automatic"}], ",", 
-       RowBox[{"PrecisionGoal", "->", "10"}]}], "]"}]}]}], 
+          "\"\</home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_\
+analysis/v999/utilities/Mathematica/Fine.dat\>\"", ",", "LFine"}], 
+          "]"}]}]}]}]}]}], "\[IndentingNewLine]", "*)"}], 
    "\[IndentingNewLine]", 
-   RowBox[{"(*", 
-    RowBox[{
-     RowBox[{"Solve", "[", 
+   RowBox[{"(*", "\[IndentingNewLine]", 
+    RowBox[{"$MaxExtraPrecision", "=", 
+     RowBox[{
       RowBox[{
-       RowBox[{
+      "150", "\[IndentingNewLine]", "\[IndentingNewLine]", "LInt300"}], "=", 
+      RowBox[{
+       RowBox[{"Table", "[", "\[IndentingNewLine]", 
         RowBox[{
-         RowBox[{"Integrate", "[", 
-          RowBox[{
-           RowBox[{"f", "[", 
-            RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-           RowBox[{"{", 
-            RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
-         RowBox[{"Integrate", "[", 
-          RowBox[{
-           RowBox[{"f", "[", 
-            RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-           RowBox[{"{", 
-            RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}], "==", 
-        "0.90"}], ",", "xup"}], "]"}], ";"}], "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"(*", 
-    RowBox[{
-     RowBox[{"Integrate", "[", 
-      RowBox[{
-       RowBox[{"f", "[", 
-        RowBox[{"Obs", ",", "x"}], "]"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}], ";"}], 
-    "*)"}]}]}]], "Input",
+         RowBox[{"{", 
+          RowBox[{"i", ",", 
+           RowBox[{"xup", " ", "/.", " ", 
+            RowBox[{"FindRoot", "[", 
+             RowBox[{
+              RowBox[{
+               RowBox[{
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "xup"}], "}"}]}], "]"}], "/", 
+                RowBox[{"Integrate", "[", 
+                 RowBox[{
+                  RowBox[{"f", "[", 
+                   RowBox[{"i", ",", "x", ",", "i"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"x", ",", "0", ",", "Infinity"}], "}"}]}], "]"}]}],
+                "-", "0.90"}], ",", 
+              RowBox[{"{", 
+               RowBox[{"xup", ",", "0", ",", "20"}], "}"}], ",", 
+              RowBox[{"MaxIterations", "->", "1000"}]}], "]"}]}]}], "}"}], 
+         "\[IndentingNewLine]", ",", 
+         RowBox[{"{", 
+          RowBox[{"i", ",", "50", ",", "300", ",", "10"}], "}"}]}], "]"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{"Export", "[", 
+        RowBox[{
+        "\"\</home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_analysis/\
+v999/utilities/Mathematica/Integer300.dat\>\"", ",", "LInt300"}], "]"}]}]}]}],
+     "\[IndentingNewLine]", "*)"}], "\[IndentingNewLine]"}]}]], "Input",
  CellChangeTimes->{{3.707096507066362*^9, 3.707096511947715*^9}, 
    3.7070965914607058`*^9, {3.7070966517933493`*^9, 3.707096682064315*^9}, {
    3.7070967510097322`*^9, 3.70709676032789*^9}, {3.707096821744405*^9, 
@@ -173,16 +317,135 @@ Cell[BoxData[
    3.707179774238052*^9}, {3.707180111018277*^9, 3.7071801112329617`*^9}, {
    3.70718050022139*^9, 3.707180553251401*^9}, {3.70718658914718*^9, 
    3.7071866187218122`*^9}, 3.7071866956098013`*^9, {3.7071893314573298`*^9, 
-   3.707189340272839*^9}, {3.707190921246323*^9, 3.7071909751009083`*^9}}],
+   3.707189340272839*^9}, {3.707190921246323*^9, 3.7071909751009083`*^9}, {
+   3.7079587463687553`*^9, 3.7079588405125847`*^9}, {3.70796009226707*^9, 
+   3.7079600948955936`*^9}, {3.7079601328335876`*^9, 3.707960168849235*^9}, {
+   3.7079603734716883`*^9, 3.707960456965748*^9}, {3.707960504334359*^9, 
+   3.707960524132329*^9}, {3.707961052087154*^9, 3.707961126297477*^9}, {
+   3.707962292569083*^9, 3.707962317760132*^9}, {3.707962351993574*^9, 
+   3.707962384015747*^9}, {3.7079628478437634`*^9, 3.707962852997855*^9}, {
+   3.7079629838650703`*^9, 3.70796316476593*^9}, {3.7079717798891373`*^9, 
+   3.707971823256915*^9}, {3.707971897384596*^9, 3.7079718976480703`*^9}, {
+   3.707971940608531*^9, 3.707971940751346*^9}, {3.707971997151465*^9, 
+   3.707971997726967*^9}, {3.707972027879043*^9, 3.707972028870407*^9}, {
+   3.707972070513023*^9, 3.707972072462221*^9}, {3.7079723345720367`*^9, 
+   3.7079723625591288`*^9}, {3.707972418675169*^9, 3.707972450033409*^9}, {
+   3.707972628887645*^9, 3.707972629222475*^9}, {3.707972794477674*^9, 
+   3.7079727979972467`*^9}, {3.707972886340222*^9, 3.7079728864280357`*^9}, {
+   3.707972926574047*^9, 3.707972927356175*^9}, {3.707973029388074*^9, 
+   3.707973030195363*^9}, {3.7079731028907423`*^9, 3.707973218912129*^9}, {
+   3.707973722058872*^9, 3.707973742322095*^9}, {3.7079737798398743`*^9, 
+   3.707973779943057*^9}, {3.707973816488028*^9, 3.7079738182070103`*^9}, {
+   3.7079742492295027`*^9, 3.7079742572441273`*^9}, {3.707974329565209*^9, 
+   3.707974354482813*^9}, {3.707974858933743*^9, 3.707974962819291*^9}, {
+   3.7079750067157087`*^9, 3.7079750102102423`*^9}, {3.7079750500265102`*^9, 
+   3.707975188159913*^9}, {3.7079752456701317`*^9, 3.707975250557684*^9}, {
+   3.707975299681357*^9, 3.707975301310114*^9}, {3.707975332757152*^9, 
+   3.707975355870564*^9}, {3.7079754242781897`*^9, 3.707975424533568*^9}, {
+   3.707977881400044*^9, 3.7079779460861597`*^9}, {3.707978761461956*^9, 
+   3.707978770467112*^9}, {3.707979190617406*^9, 3.707979191520177*^9}, {
+   3.707979403812994*^9, 3.707979412723036*^9}, {3.708029031408896*^9, 
+   3.708029132695237*^9}, {3.708029260230179*^9, 3.7080293441008387`*^9}, {
+   3.708032003417444*^9, 3.708032005072167*^9}, 3.708032041805231*^9, {
+   3.708032088741893*^9, 3.7080321306884193`*^9}, {3.708032220355435*^9, 
+   3.708032241706009*^9}, {3.708033745457286*^9, 3.708033747872838*^9}, {
+   3.708033832242127*^9, 3.708033895895426*^9}, {3.708033982686054*^9, 
+   3.708033996951462*^9}, {3.708035334214224*^9, 3.7080353836130247`*^9}, {
+   3.7080355402678423`*^9, 3.7080355818030853`*^9}, {3.708035634242936*^9, 
+   3.708035636554783*^9}}],
 
-Cell[BoxData["7.457286844609566`"], "Output",
- CellChangeTimes->{{3.707186607157404*^9, 3.707186619509899*^9}, 
-   3.707186696709182*^9, {3.707189334013834*^9, 3.7071893409677258`*^9}, {
-   3.7071909219159813`*^9, 3.707190976421036*^9}}]
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"0.01`", ",", "2.3194513837868524`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.02`", ",", "2.335635406523155`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.03`", ",", "2.351299073899005`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.04`", ",", "2.366525571687727`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.05`", ",", "2.3813706889966024`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.06`", ",", "2.395875725125203`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.07`", ",", "2.41007300517774`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.08`", ",", "2.4239887703535263`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.09`", ",", "2.437644884065627`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.11`", ",", "2.464249913243631`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.12`", ",", "2.477228857070618`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.13`", ",", "2.4900091106594378`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.14`", ",", "2.502601674055427`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.15`", ",", "2.515016412260482`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.16`", ",", "2.527262229169789`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.17`", ",", "2.539347206403652`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.18`", ",", "2.551278715711111`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.19`", ",", "2.5630635111169555`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.21`", ",", "2.5862173335009566`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.22`", ",", "2.597597407523714`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.23`", ",", "2.6088529616314773`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.24`", ",", "2.619988591923381`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.25`", ",", "2.631008590284497`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.26`", ",", "2.6419169738478865`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.27`", ",", "2.6527175106987686`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.28`", ",", "2.6634137424125464`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.29`", ",", "2.6740090039085147`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.31`", ",", "2.694909026065047`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.32`", ",", "2.705219571815143`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.33`", ",", "2.715440743878221`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.34`", ",", "2.725575071897199`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.35000000000000003`", ",", "2.735624959599114`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.36`", ",", "2.745592693874078`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.37`", ",", "2.7554804529951666`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.38`", ",", "2.7652903140795506`"}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"0.39`", ",", "2.7750242598775845`"}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.708032097244966*^9, 3.708032143103874*^9, {3.7080322285548477`*^9, 
+   3.70803224514349*^9}, 3.7080335691314*^9, 3.7080338366088448`*^9, 
+   3.7080339654731503`*^9, 3.70803420667934*^9, 3.7080354145622168`*^9, 
+   3.708035702791275*^9}],
+
+Cell[BoxData["\<\"/home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_\
+analysis/v999/utilities/Mathematica/SuperFine.dat\"\>"], "Output",
+ CellChangeTimes->{
+  3.708032097244966*^9, 3.708032143103874*^9, {3.7080322285548477`*^9, 
+   3.70803224514349*^9}, 3.7080335691314*^9, 3.7080338366088448`*^9, 
+   3.7080339654731503`*^9, 3.70803420667934*^9, 3.7080354145622168`*^9, 
+   3.708035702822732*^9}]
 }, Open  ]]
 },
 WindowSize->{1920, 979},
-WindowMargins->{{0, Automatic}, {Automatic, 11}},
+WindowMargins->{{653, Automatic}, {-44, 83}},
 FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -199,11 +462,13 @@ CellTagsIndex->{}
 Notebook[{
 Cell[CellGroupData[{
 Cell[580, 22, 89, 2, 68, "Input"],
-Cell[672, 26, 258, 5, 32, "Output"]
+Cell[672, 26, 428, 7, 32, "Output"]
 }, Open  ]],
+Cell[1115, 36, 2066, 56, 148, "Input"],
 Cell[CellGroupData[{
-Cell[967, 36, 6033, 139, 240, "Input"],
-Cell[7003, 177, 237, 3, 32, "Output"]
+Cell[3206, 96, 12682, 258, 709, "Input"],
+Cell[15891, 356, 3222, 79, 80, "Output"],
+Cell[19116, 437, 403, 6, 32, "Output"]
 }, Open  ]]
 }
 ]
