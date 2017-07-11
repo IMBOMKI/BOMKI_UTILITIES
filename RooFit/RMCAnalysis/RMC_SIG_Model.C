@@ -65,14 +65,15 @@ std::pair<double,double> FindClosestKey(std::map<double,double> map, double b){
 void RMC_SIG_Model(string element){
   gSystem->Load("RooELossPdf_cxx.so");
   gSystem->Load("RooPolyFitPdf_cxx.so");
-  RooRandom::randomGenerator()->SetSeed(11);  
+  RooRandom::randomGenerator()->SetSeed(12);  
 
   ////////////////////////////////////////////
   // Set SIG MODEL and Find Momentum Window //
   ////////////////////////////////////////////
 
-  Bool_t ifUseInternalRMC=0;
+  Bool_t ifUseInternalRMC=1;
 
+  int A; //Atomic Mass
   Double_t par0;
   Double_t par1;
   Double_t par2;
@@ -91,12 +92,13 @@ void RMC_SIG_Model(string element){
   Double_t TimeFOM;
   Double_t Acceptance;
   Double_t lowB;
-  Double_t upB=105;
+  Double_t upB=120;
+  if (element=="Al") upB=94;
   Double_t ProbGND=0.9;
   Double_t fcap;
   Int_t BinNumber;
 
-  Int_t N=47;
+  Int_t N=48;
   if (element=="Al") N=2;
   Double_t RMCAcceptance[N];
   Double_t SigAcceptance[N];
@@ -154,11 +156,13 @@ void RMC_SIG_Model(string element){
     lvar=0.10388;
     sigE = 92.3;
     lowB=90.30;
-    BinNumber = 30;
+    //BinNumber = 30;
+    //BinNumber = (upB-90)/0.5
     BR_rmc = 6.21751*pow(10,-7);      
     par0=1.1024*pow(10,-1);
     par1=3.41745;
     rmc_end=101.34;
+    A=27;
   }
   else if (element=="S"){
     lmean = 0.338;
@@ -169,13 +173,15 @@ void RMC_SIG_Model(string element){
     rmc_mean  = -1.88921;
     rmc_var  = 2.01315;
     lowB  = 96.0;
-    BinNumber = 58;
+    //BinNumber = 58;
+    //BinNumber = (upB-90)/0.5
     BR_rmc = 1.38693*pow(10,-7);      
     TimeFOM=0.142;
     fcap = 0.75;
     par0=1.66554*pow(10,-1);
     par1=3.68714;
     rmc_end=102.03;
+    A=32;
   }
   else if (element=="Ca"){
     lmean = 0.375;
@@ -193,6 +199,7 @@ void RMC_SIG_Model(string element){
     par0=2.34185*pow(10,-1);
     par1=3.50945;
     rmc_end=102.06;
+    A=40;
   }
   else if (element=="Ti"){ //Bad Fit
     lmean = 0.484;
@@ -210,6 +217,7 @@ void RMC_SIG_Model(string element){
     par0=3.35934*pow(10,-1);
     par1=3.51422;
     rmc_end=99.17;
+    A=48;
   }
   else if (element=="Cr"){
     lmean = 0.572;
@@ -225,6 +233,7 @@ void RMC_SIG_Model(string element){
     par0=4.06216*pow(10,-1);
     par1=3.56581;
     rmc_end=101.86;
+    A=50;
   }
   else if (element=="Fe"){
     lmean = 0.610;
@@ -240,6 +249,7 @@ void RMC_SIG_Model(string element){
     par0=4.09697*pow(10,-1);
     par1=3.64415;
     rmc_end=101.93;
+    A=54;
   }
   else if (element=="Ni"){ // Bad Fit
     lmean = 0.672;
@@ -255,6 +265,7 @@ void RMC_SIG_Model(string element){
     par0=4.29729*pow(10,-1);
     par1=3.62841;
     rmc_end=101.95;
+    A=58;
   }
   else if (element=="Zn"){
     lmean = 0.567;
@@ -270,6 +281,7 @@ void RMC_SIG_Model(string element){
     par0=3.80561*pow(10,-1);
     par1=3.685;
     rmc_end=101.43;
+    A=64;
   }
   else if (element=="Ge"){
     lmean = 0.499;
@@ -286,6 +298,7 @@ void RMC_SIG_Model(string element){
     par1=3.80235;
     par2=2.36536;
     rmc_end=100.02;
+    A=70;
   }
   else return;
 
@@ -294,6 +307,8 @@ void RMC_SIG_Model(string element){
 
   Double_t lowBshift=20;
   if (element=="Al") lowBshift=0.3;
+
+  BinNumber = (upB-lowB+lowBshift)/0.5;
 
   RooRealVar lowerBound("lowerBound","lowerBound", lowB-lowBshift);
   RooRealVar LOWB("LOWB","LOWB", lowB);
@@ -316,7 +331,6 @@ void RMC_SIG_Model(string element){
   RooGenericPdf sigPdf_g4("sigG4","sigG4","Landau(-x+sigEVal,landauMean,landauVar)",RooArgSet(x,sigEVal,landauMean,landauVar));  
 
   // Smearing from Detector Response 
-  //RooRealVar x_s("x_s","x_s",-10,10);
   RooRealVar gausMean("gausMean","gausMean",0);
   RooRealVar gausVar("gausVar","gausVar",0.2);
   RooGaussian smearPdf("smear","smear",x,gausMean,gausVar);
@@ -390,15 +404,16 @@ void RMC_SIG_Model(string element){
 
   Par2.setConstant(kTRUE);
   RooPolyFitPdf polyFit("polyFit","polyFit",x,Par0,Par1,Par2);
-  
-  //RooFFTConvPdf poly_landau("rmcPdf_landau","rmcPdf_landau",x,polyFit,eLoss);
-  RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,smearPdf);
-
   polyFit.plotOn(rmcFrame2);
-  //poly_landau.plotOn(rmcFrame2,LineColor(kRed));
-  poly_detResp.plotOn(rmcFrame2,LineColor(kGreen));
-  rmcFrame2->Draw();
+  
+  //RooNumConvPdf poly_landau("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,eLoss);
+  //RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,poly_landau,smearPdf);
 
+  RooNumConvPdf LandauGaus("landauGaus","landauGaus",x,eLoss,smearPdf);
+  RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
+  poly_detResp.plotOn(rmcFrame,LineColor(kBlack));
+
+  rmcFrame2->Draw();
 
   // Find Energy window with 90 % acceptance
   Double_t Window_ELow;
@@ -410,7 +425,7 @@ void RMC_SIG_Model(string element){
     for (Int_t i=0; i<itN; i++){
       x.setRange("window",sigE-stepSize*i,upB);
       RooAbsReal* isig = sigPdf_detResp.createIntegral(x,NormSet(x),Range("window"));
-      if (TMath::Abs(isig->getVal()-(i_acc+1)*(0.95/N)) < tolerance) {
+      if (TMath::Abs(isig->getVal()-(i_acc+1)*(0.96/N)) < tolerance) {
 	Window_ELow=sigE-stepSize*i;
 	//std::cout << isig->getVal() << std::endl;
 	std::cout << "Signal Acceptance in Momentum Window: " << TMath::Abs(isig->getVal()) << std::endl;
@@ -469,6 +484,25 @@ void RMC_SIG_Model(string element){
   std::cout << "Optimized Sensitivity: " << opt_Sens << std::endl;
   std::cout << "Optimized SignalWidow: " << opt_winMin << "~" << opt_winMax << std::endl;
 
+
+
+
+  ////////////// Test Convolved detection response ///////////////
+  TCanvas* c5 = new TCanvas("test","test",600,600);
+
+  RooRealVar x_test("x_test","x_test",-10,10);
+  RooELossPdf eLoss_test ("eLoss_test","eLoss_test",x_test, landauMean,landauVar);    
+  RooGaussian smearPdf_test("smear_test","smear_test",x_test,gausMean,gausVar);
+  RooNumConvPdf LandauGaus_test("landauGaus_test","landauGaus_test",x_test,eLoss_test,smearPdf_test);
+  
+  RooPlot* testFrame = x_test.frame(Title("")); 
+  LandauGaus_test.plotOn(testFrame);
+  eLoss_test.plotOn(testFrame,LineColor(kRed));
+  smearPdf_test.plotOn(testFrame,LineColor(kGreen));
+  testFrame->Draw();
+  ////////////////////////////////////////////////////////////////
+
+
   /////////////////////////////////////
   // Set Composite Model For Calcium //
   /////////////////////////////////////
@@ -494,7 +528,7 @@ void RMC_SIG_Model(string element){
   Int_t rmcNum=rmcNum_part*irmc_total->getVal()/irmc_part->getVal(); // RMC number from lowerBound.getValV() to upB (range of x)
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
   Double_t muepBr=opt_Sens; // Ca40
-  if (element=="Al") muepBr=2.5*TMath::Power(10,-13);
+  if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
   Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
@@ -525,18 +559,49 @@ void RMC_SIG_Model(string element){
   compFrame->GetXaxis()->SetTitleOffset(1.23);
   if (element=="Al") compFrame->GetYaxis()->SetTitleOffset(1.5);
 
-  compFrame->GetXaxis()->SetLimits(lowB,upB);
-  if (element!="Al") compFrame->SetMaximum(1000);
+  Double_t xAxisMin=101.0;
+  Double_t xAxisMax=104.5;
+  Double_t yAxisMin=0;
+  Double_t yAxisMax=10.0;
 
-  TLine *Line = new TLine(opt_winMin, 0,opt_winMin,100);
+  if (element=="Ti") {
+    xAxisMin=97.5;
+    xAxisMax=100.0;
+    yAxisMax=50.0;
+  }
+  else if (element=="Fe" || element=="Ni") {
+    xAxisMin=100.5;
+    xAxisMax=104.5;
+  }
+  else if (element=="Al") {
+    xAxisMin=90.5;
+    //xAxisMax=94.0;
+    xAxisMax=upB;
+    //yAxisMin=3*Power(10,4);
+    yAxisMin=0;
+    yAxisMax=1.2*Power(10,5);
+  }
+  compFrame->GetXaxis()->SetLimits(xAxisMin,xAxisMax);
+  compFrame->SetMaximum(yAxisMax);
+  compFrame->SetMinimum(yAxisMin);
+
+  TLine *Line = new TLine(opt_winMin, 0,opt_winMin,yAxisMax);
   Line->SetLineStyle(kDashed);
-  TLatex *latexLine  = new TLatex(opt_winMin, 10,"  Signal Window: E_{e^{+}}>101.2 MeV");
-  latexLine->SetTextSize(0.027);
+  TLatex *latexLine  = new TLatex(opt_winMin, yAxisMax*0.65,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
+  //latexLine->SetTextFont(4);
+  latexLine->SetTextSize(0.047);
+  TLatex *latexLine2  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yAxisMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
+  latexLine2->SetTextSize(0.047);
+
+  //TLatex *latexLine  = new TLatex(opt_winMin, 10,"  E_{e^{+}}>101.2 MeV");
+  //latexLine->SetTextSize(0.047);
+
 
   if(element!="Al"){
     compFrame->addObject(Line);    
     compFrame->addObject(latexLine);    
   }
+  compFrame->addObject(latexLine2);    
   compFrame->Draw();
 
   std::cout << "///////////////////////////////////////" << std::endl;
