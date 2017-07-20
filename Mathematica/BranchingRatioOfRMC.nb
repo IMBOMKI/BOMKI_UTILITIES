@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     30457,        868]
-NotebookOptionsPosition[     28228,        799]
-NotebookOutlinePosition[     28560,        814]
-CellTagsIndexPosition[     28517,        811]
+NotebookDataLength[     31785,        898]
+NotebookOptionsPosition[     29548,        829]
+NotebookOutlinePosition[     29887,        844]
+CellTagsIndexPosition[     29844,        841]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -483,12 +483,21 @@ Cell[BoxData[{
  StyleBox[
   RowBox[{"RMC", " ", "Branching", " ", "Ratio", " ", "for", " ", "Cromium"}],
    "Title"], "\[IndentingNewLine]", 
- RowBox[{"MeasdayCr", 
-  StyleBox["=", "Input"], 
+ RowBox[{
+  RowBox[{"MeasdayCr", 
+   StyleBox["=", "Input"], 
+   StyleBox[
+    RowBox[{"1.30", "*", 
+     RowBox[{"10", "^", 
+      RowBox[{"-", "5"}]}]}], "Input"]}], 
+  StyleBox["  ", "Input"], 
   StyleBox[
-   RowBox[{"1.71", "*", 
-    RowBox[{"10", "^", 
-     RowBox[{"-", "5"}]}]}], "Input"]}], "\[IndentingNewLine]", 
+   RowBox[{
+    StyleBox[
+     RowBox[{"(", "*"}]], " ", 
+    RowBox[{"Same", " ", "with", " ", "Titannium"}], " ", 
+    StyleBox[
+     RowBox[{"*", ")"}]]}], "Input"]}], "\[IndentingNewLine]", 
  StyleBox[
   RowBox[{
    RowBox[{"f", "[", "x_", "]"}], ":=", 
@@ -630,7 +639,7 @@ Cell[BoxData[{
  RowBox[{"MeasdayZn", 
   StyleBox["=", "Input"], 
   StyleBox[
-   RowBox[{"1.71", "*", 
+   RowBox[{"1.48", "*", 
     RowBox[{"10", "^", 
      RowBox[{"-", "5"}]}]}], "Input"]}], "\[IndentingNewLine]", 
  StyleBox[
@@ -679,7 +688,7 @@ Cell[BoxData[{
  RowBox[{"MeasdayGe", 
   StyleBox["=", "Input"], 
   StyleBox[
-   RowBox[{"1.71", "*", 
+   RowBox[{"1.48", "*", 
     RowBox[{"10", "^", 
      RowBox[{"-", "5"}]}]}], "Input"]}], "\[IndentingNewLine]", 
  StyleBox[
@@ -724,81 +733,102 @@ Cell[BoxData[{
   3.707915274622918*^9, 3.707915289995619*^9}, {3.707915359502831*^9, 
   3.707915372530759*^9}, {3.707915412001463*^9, 3.7079154797655363`*^9}, {
   3.7079155276524477`*^9, 3.707915718589365*^9}, {3.70791575715198*^9, 
-  3.7079157588767776`*^9}}],
+  3.7079157588767776`*^9}, {3.709521592231598*^9, 3.7095216279590483`*^9}, {
+  3.70952176272614*^9, 3.7095217668679256`*^9}}],
 
 Cell[BoxData[
  RowBox[{"Branching", " ", "Cromium", " ", "for", " ", "Ratio", " ", 
   "RMC"}]], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.7095217676439734`*^9}],
 
-Cell[BoxData["0.000017100000000000002`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915759916099*^9}],
+Cell[BoxData["0.000013000000000000001`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.70952176764505*^9}],
 
-Cell[BoxData["0.001522046630982089`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915759944724*^9}],
+Cell[BoxData["0.0011571114738460325`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.7095217676463203`*^9}],
 
-Cell[BoxData["1.0623048126524653`*^-7"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.7079157599749107`*^9}],
+Cell[BoxData["8.076001499704856`*^-8"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.7095217676669073`*^9}],
 
 Cell[BoxData[
  RowBox[{"Branching", " ", "for", " ", "Iron", " ", "Ratio", " ", 
   "RMC"}]], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915760047819*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.70952176766812*^9}],
 
 Cell[BoxData["0.000017100000000000002`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.7079157603622932`*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767669148*^9}],
 
 Cell[BoxData["0.0015191956307558578`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.70791576125702*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.70952176767023*^9}],
 
 Cell[BoxData["1.0918299360112931`*^-7"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915761287365*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767692149*^9}],
 
 Cell[BoxData[
  RowBox[{"Branching", " ", "for", " ", "Nickel", " ", "Ratio", " ", 
   "RMC"}]], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915761547288*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767696519*^9}],
 
 Cell[BoxData["0.0000148`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.7079157615759*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767697423*^9}],
 
 Cell[BoxData["0.0013141562921694407`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915761605768*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767698391*^9}],
 
 Cell[BoxData["9.523453763923351`*^-8"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915761872957*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.7095217677205973`*^9}],
 
 Cell[BoxData[
  RowBox[{"Branching", " ", "for", " ", "Ratio", " ", "RMC", " ", 
   "Zinc"}]], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915761902932*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767721898*^9}],
 
-Cell[BoxData["0.000017100000000000002`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915763935935*^9}],
+Cell[BoxData["0.0000148`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767722986*^9}],
 
-Cell[BoxData["0.0015398296596213271`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915764004525*^9}],
+Cell[BoxData["0.0013327180679763532`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767723868*^9}],
 
-Cell[BoxData["8.904292702431311`*^-8"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915764073327*^9}],
+Cell[BoxData["7.706639297994653`*^-8"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767724656*^9}],
 
 Cell[BoxData[
  RowBox[{"Branching", " ", "for", " ", "Germanium", " ", "Ratio", " ", 
   "RMC"}]], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.7079157641447887`*^9}],
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767725545*^9}],
 
-Cell[BoxData["0.000017100000000000002`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915765630315*^9}],
+Cell[BoxData["0.0000148`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.70952176772655*^9}],
 
-Cell[BoxData["0.0016015869458762498`"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.707915765709751*^9}],
+Cell[BoxData["0.0013861688186531285`"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767750193*^9}],
 
-Cell[BoxData["4.4127981701776`*^-8"], "Output",
- CellChangeTimes->{3.707915727139812*^9, 3.70791576577363*^9}]
+Cell[BoxData["3.819263913365078`*^-8"], "Output",
+ CellChangeTimes->{3.707915727139812*^9, 3.7079157598821163`*^9, 
+  3.7095216357433987`*^9, 3.709521767751655*^9}]
 }, Open  ]]
 },
-WindowSize->{1920, 979},
-WindowMargins->{{0, Automatic}, {28, 11}},
+WindowSize->{1920, 1041},
+WindowMargins->{{Automatic, -119}, {-302, 279}},
 FrontEndVersion->"11.0 for Linux x86 (64-bit) (September 21, 2016)",
 StyleDefinitions->"Default.nb"
 ]
@@ -848,27 +878,27 @@ Cell[17827, 472, 113, 1, 32, "Output"],
 Cell[17943, 475, 114, 1, 34, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[18094, 481, 7524, 245, 849, "Input"],
-Cell[25621, 728, 171, 3, 32, "Output"],
-Cell[25795, 733, 115, 1, 32, "Output"],
-Cell[25913, 736, 112, 1, 32, "Output"],
-Cell[26028, 739, 116, 1, 34, "Output"],
-Cell[26147, 742, 166, 3, 32, "Output"],
-Cell[26316, 747, 117, 1, 32, "Output"],
-Cell[26436, 750, 112, 1, 32, "Output"],
-Cell[26551, 753, 114, 1, 34, "Output"],
-Cell[26668, 756, 168, 3, 32, "Output"],
-Cell[26839, 761, 99, 1, 32, "Output"],
-Cell[26941, 764, 113, 1, 32, "Output"],
-Cell[27057, 767, 113, 1, 34, "Output"],
-Cell[27173, 770, 166, 3, 32, "Output"],
-Cell[27342, 775, 115, 1, 32, "Output"],
-Cell[27460, 778, 113, 1, 32, "Output"],
-Cell[27576, 781, 113, 1, 34, "Output"],
-Cell[27692, 784, 173, 3, 32, "Output"],
-Cell[27868, 789, 115, 1, 32, "Output"],
-Cell[27986, 792, 113, 1, 32, "Output"],
-Cell[28102, 795, 110, 1, 34, "Output"]
+Cell[18094, 481, 7850, 255, 849, "Input"],
+Cell[25947, 738, 222, 4, 32, "Output"],
+Cell[26172, 744, 165, 2, 32, "Output"],
+Cell[26340, 748, 166, 2, 32, "Output"],
+Cell[26509, 752, 166, 2, 34, "Output"],
+Cell[26678, 756, 216, 4, 32, "Output"],
+Cell[26897, 762, 166, 2, 32, "Output"],
+Cell[27066, 766, 163, 2, 32, "Output"],
+Cell[27232, 770, 165, 2, 34, "Output"],
+Cell[27400, 774, 219, 4, 32, "Output"],
+Cell[27622, 780, 152, 2, 32, "Output"],
+Cell[27777, 784, 164, 2, 32, "Output"],
+Cell[27944, 788, 166, 2, 34, "Output"],
+Cell[28113, 792, 217, 4, 32, "Output"],
+Cell[28333, 798, 152, 2, 32, "Output"],
+Cell[28488, 802, 164, 2, 32, "Output"],
+Cell[28655, 806, 164, 2, 34, "Output"],
+Cell[28822, 810, 222, 4, 32, "Output"],
+Cell[29047, 816, 151, 2, 32, "Output"],
+Cell[29201, 820, 164, 2, 32, "Output"],
+Cell[29368, 824, 164, 2, 34, "Output"]
 }, Open  ]]
 }
 ]

@@ -173,8 +173,8 @@ void RMC_SIG_Model(string element){
     rmc_mean  = -1.88921;
     rmc_var  = 2.01315;
     lowB  = 96.0;
-    //BinNumber = 58;
     //BinNumber = (upB-90)/0.5
+    BinNumber = 58;
     BR_rmc = 1.38693*pow(10,-7);      
     TimeFOM=0.142;
     fcap = 0.75;
@@ -227,7 +227,7 @@ void RMC_SIG_Model(string element){
     rmc_var  = 1.80533;
     lowB  = 96.0;
     BinNumber = 58;
-    BR_rmc = 1.0623*pow(10,-7);
+    BR_rmc = 8.076*pow(10,-8);
     TimeFOM=0.0378;
     fcap = 0.8939;
     par0=4.06216*pow(10,-1);
@@ -251,7 +251,7 @@ void RMC_SIG_Model(string element){
     rmc_end=101.93;
     A=54;
   }
-  else if (element=="Ni"){ // Bad Fit
+  else if (element=="Ni"){ 
     lmean = 0.672;
     lvar  = 0.212;
     sigE  = 104.25;
@@ -275,7 +275,7 @@ void RMC_SIG_Model(string element){
     rmc_var  = 1.67151;
     lowB  = 96.0;
     BinNumber = 58;
-    BR_rmc = 0.890429*pow(10,-7);
+    BR_rmc = 7.70664*pow(10,-8);
     TimeFOM=0.0112;
     fcap=0.9299;
     par0=3.80561*pow(10,-1);
@@ -291,7 +291,7 @@ void RMC_SIG_Model(string element){
     rmc_var  = 1.26261;
     lowB  = 96.0;
     BinNumber = 58;
-    BR_rmc = 0.44128*pow(10,-7);
+    BR_rmc = 3.81926*pow(10,-8);
     TimeFOM=0.0133;
     fcap = 0.9272;    
     par0=6.19571*pow(10,-1);
@@ -569,9 +569,22 @@ void RMC_SIG_Model(string element){
     xAxisMax=100.0;
     yAxisMax=50.0;
   }
-  else if (element=="Fe" || element=="Ni") {
+  else if (element=="S") {
+    xAxisMin=101.0;
+    xAxisMax=103.5;
+    yAxisMax=15.0;
+  }
+  else if (element=="Fe" || element=="Ni" || element=="Cr") {
     xAxisMin=100.5;
     xAxisMax=104.5;
+  }
+  else if (element=="Zn") {
+    xAxisMin=100.0;
+    xAxisMax=103.5;
+  }
+  else if (element=="Ge") {
+    xAxisMin=98.5;
+    xAxisMax=101.0;
   }
   else if (element=="Al") {
     xAxisMin=90.5;
@@ -588,8 +601,8 @@ void RMC_SIG_Model(string element){
   TLine *Line = new TLine(opt_winMin, 0,opt_winMin,yAxisMax);
   Line->SetLineStyle(kDashed);
   TLatex *latexLine  = new TLatex(opt_winMin, yAxisMax*0.65,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
-  //latexLine->SetTextFont(4);
   latexLine->SetTextSize(0.047);
+  // Change the font to helvetica & 25 size manually
   TLatex *latexLine2  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yAxisMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
   latexLine2->SetTextSize(0.047);
 
