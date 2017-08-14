@@ -65,7 +65,7 @@ std::pair<double,double> FindClosestKey(std::map<double,double> map, double b){
 void RMC_SIG_Model(string element){
   gSystem->Load("RooELossPdf_cxx.so");
   gSystem->Load("RooPolyFitPdf_cxx.so");
-  RooRandom::randomGenerator()->SetSeed(12);  
+  RooRandom::randomGenerator()->SetSeed(2);  
 
   ////////////////////////////////////////////
   // Set SIG MODEL and Find Momentum Window //
@@ -405,13 +405,10 @@ void RMC_SIG_Model(string element){
   Par2.setConstant(kTRUE);
   RooPolyFitPdf polyFit("polyFit","polyFit",x,Par0,Par1,Par2);
   polyFit.plotOn(rmcFrame2);
-  
-  //RooNumConvPdf poly_landau("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,eLoss);
-  //RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,poly_landau,smearPdf);
 
   RooNumConvPdf LandauGaus("landauGaus","landauGaus",x,eLoss,smearPdf);
   RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
-  poly_detResp.plotOn(rmcFrame,LineColor(kBlack));
+  poly_detResp.plotOn(rmcFrame2,LineColor(kBlack));
 
   rmcFrame2->Draw();
 
@@ -527,7 +524,8 @@ void RMC_SIG_Model(string element){
 
   Int_t rmcNum=rmcNum_part*irmc_total->getVal()/irmc_part->getVal(); // RMC number from lowerBound.getValV() to upB (range of x)
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
-  Double_t muepBr=opt_Sens; // Ca40
+  //Double_t muepBr=opt_Sens; 
+  Double_t muepBr=TMath::Power(10,-14); 
   if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
   Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
@@ -537,11 +535,8 @@ void RMC_SIG_Model(string element){
   RooBinning bins(BinNumber,lowerBound.getValV(),upB);
 
   /* Make Composite Comp */
-  //RooAddPdf compPdf("comp", "comp", RooArgList(sigPdf_detResp, rmcPdf_detResp),sigFrac);
   RooAddPdf compPdf("comp", "comp", RooArgList(sigPdf_detResp, poly_detResp),sigFrac);
   RooDataSet *compData=compPdf.generate(x, (sigNum+rmcNum));
-  //RooRealVar x_Al("x_Al","x_Al",lowB,upB);
-  //RooDataSet *compData_Al=compPdf.generate(x_Al, (sigNum+rmcNum_part)); 
 
   /* Plot Composite Comp */
   RooPlot* compFrame = x.frame(Title(""));
@@ -564,20 +559,36 @@ void RMC_SIG_Model(string element){
   Double_t yAxisMin=0;
   Double_t yAxisMax=10.0;
 
-  if (element=="Ti") {
+  if (element=="Ca") {
+    xAxisMin=100.5;
+    xAxisMax=104.5;
+    yAxisMax=50.0;
+  }
+
+  else if (element=="S") {
+    xAxisMin=100.5;
+    xAxisMax=103.5;
+    yAxisMax=100.0;
+  }
+
+  else if (element=="Ti") {
     xAxisMin=97.5;
     xAxisMax=100.0;
     yAxisMax=50.0;
   }
-  else if (element=="S") {
-    xAxisMin=101.0;
-    xAxisMax=103.5;
-    yAxisMax=15.0;
-  }
-  else if (element=="Fe" || element=="Ni" || element=="Cr") {
+
+  else if (element=="Fe" || element=="Cr") {
     xAxisMin=100.5;
     xAxisMax=104.5;
+    yAxisMax=20.0;
   }
+
+  else if (element=="Ni") {
+    xAxisMin=100.5;
+    xAxisMax=104.5;
+    yAxisMax=10.0;
+  }
+
   else if (element=="Zn") {
     xAxisMin=100.0;
     xAxisMax=103.5;
@@ -585,6 +596,7 @@ void RMC_SIG_Model(string element){
   else if (element=="Ge") {
     xAxisMin=98.5;
     xAxisMax=101.0;
+    yAxisMax=20.0;
   }
   else if (element=="Al") {
     xAxisMin=90.5;
@@ -601,13 +613,10 @@ void RMC_SIG_Model(string element){
   TLine *Line = new TLine(opt_winMin, 0,opt_winMin,yAxisMax);
   Line->SetLineStyle(kDashed);
   TLatex *latexLine  = new TLatex(opt_winMin, yAxisMax*0.65,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
-  latexLine->SetTextSize(0.047);
-  // Change the font to helvetica & 25 size manually
+  latexLine->SetTextSize(0.044);
   TLatex *latexLine2  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yAxisMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
   latexLine2->SetTextSize(0.047);
 
-  //TLatex *latexLine  = new TLatex(opt_winMin, 10,"  E_{e^{+}}>101.2 MeV");
-  //latexLine->SetTextSize(0.047);
 
 
   if(element!="Al"){
@@ -622,12 +631,81 @@ void RMC_SIG_Model(string element){
   std::cout << "///////////////////////////////////////" << std::endl;
   std::cout << Double_t(N_pair)/t->GetEntries() << "  " << Double_t(N_VatT)/Double_t(N_pair) << "  " << Double_t(N_mom)/Double_t(N_VatT) << std::endl;
   std::cout << "///////////////////////////////////////" << std::endl;
+  std::cout << Double_t(N_pair)/t->GetEntries() << "  " << Double_t(N_VatT)/Double_t(N_pair) << "  " << Double_t(N_mom)/Double_t(N_VatT) << std::endl; 
+  std::cout << "///////////////////////////////////////" << std::endl;
 
-  //std::cout << irmc_part->getVal() << "  " << irmc_total->getVal() << std::endl;
-  //std::cout << rmcNum << std::endl;
-  //std::cout << rmcNum*irmc_window->getVal()/irmc_total->getVal() << std::endl;
-  //std::cout << irmc_window->getVal()/irmc_part->getVal() << std::endl;
+  //////////////////////////
+  // Draw Boxed Histogram //
+  //////////////////////////
 
+  if (element=="S") {
+    xAxisMin=100.5;
+    xAxisMax=103.0;
+    yAxisMax=100.0;
+  }
+
+  else if (element=="Ti") {
+    xAxisMin=97.5;
+    xAxisMax=99.5;
+    yAxisMax=50.0;
+  }
+
+
+  Double_t HistBinSize=0.1;
+  Int_t HistBinNumber= (xAxisMax-xAxisMin)/HistBinSize;
+  TCanvas* c6 = new TCanvas("hist","hist",600,600);
+  TH1D *h_rmc = new TH1D("hist_rmc","hist_rmc", HistBinNumber ,xAxisMin,xAxisMax);
+  TH1D *h_sig = new TH1D("hist_sig","hist_sig", HistBinNumber ,xAxisMin,xAxisMax);
+  
+  Double_t bin_start;
+  Double_t bin_end;
+  Double_t histY_rmc;
+  Double_t histY_sig;
+  RooAbsReal* isig_part = sigPdf_detResp.createIntegral(x,NormSet(x),Range("total"));
+
+  for (Int_t i=0; i< HistBinNumber; i++){
+    bin_start=xAxisMin+i*HistBinSize;
+    bin_end=xAxisMin+(i+1)*HistBinSize;
+    x.setRange("singleBin",bin_start,bin_end);    
+
+    RooAbsReal* irmc_singleBin = poly_detResp.createIntegral(x,NormSet(x),Range("singleBin"));
+    histY_rmc = rmcNum*irmc_singleBin->getVal()/irmc_total->getVal();
+    RooAbsReal* isig_singleBin = sigPdf_detResp.createIntegral(x,NormSet(x),Range("singleBin"));
+    histY_sig = sigNum*isig_singleBin->getVal()/isig_part->getVal();
+    h_rmc->SetBinContent(i+1,histY_rmc);
+    h_sig->SetBinContent(i+1,histY_sig);   
+
+    std::cout << i << "  " << bin_start << "  " << bin_end << "  " << histY_rmc << "  " << histY_sig << std::endl;
+  }
+  h_rmc->SetLineColor(kBlue);
+  h_sig->SetLineColor(kRed);
+  THStack *st = new THStack("st","Stacked 2D histograms");
+  st->Add(h_rmc);
+  st->Add(h_sig);
+  st->SetTitle("");
+  st->Draw();
+  c6->Update();
+
+  //Double_t yHistMax = c6->GetFrame()->GetY2();
+  Double_t yHistMax = gPad->GetUymax();
+  TLine *Line_hist = new TLine(opt_winMin, 0,opt_winMin,yHistMax);
+  Line_hist->SetLineStyle(kDashed);
+  TLatex *latexLine_hist  = new TLatex(opt_winMin, yHistMax*0.7,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
+  latexLine_hist->SetTextSize(0.044);
+  TLatex *latexLine2_hist  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yHistMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
+  latexLine2_hist->SetTextSize(0.047);
+
+  if(element!="Al"){
+    Line_hist->Draw();    
+    latexLine_hist->Draw();    
+  }
+  latexLine2_hist->Draw();    
+
+  st->GetXaxis()->SetTitleOffset(1.23);
+  st->GetYaxis()->SetTitleOffset(1.23) ; 
+  st->GetXaxis()->SetTitle("E_{e^{+}} (MeV)");
+  st->GetYaxis()->SetTitle("Counts per 0.1 MeV");
+ 
   ///////////////////////////////
   // RooStats Likelihood Method //
   ///////////////////////////////
