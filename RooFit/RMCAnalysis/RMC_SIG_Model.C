@@ -94,6 +94,7 @@ void RMC_SIG_Model(string element){
   Double_t lowB;
   Double_t upB=120;
   if (element=="Al") upB=94;
+  //if (element=="Al") upB=120;
   Double_t ProbGND=0.9;
   Double_t fcap;
   Int_t BinNumber;
@@ -314,7 +315,6 @@ void RMC_SIG_Model(string element){
   RooRealVar LOWB("LOWB","LOWB", lowB);
   RooRealVar upperBound("lowerBound","lowerBound", upB);
   RooRealVar x("x","x",lowerBound.getValV(),upperBound.getValV());
-  //RooRealVar x("x","x",-20,upperBound.getValV());
   x.setBins(6000);
   if (element=="Al") x.setBins(100);
 
@@ -324,8 +324,6 @@ void RMC_SIG_Model(string element){
   RooRealVar Par0("Par0","Par0",par0);
   RooRealVar Par1("Par1","Par1",par1);
   RooRealVar Par2("Par2","Par2",rmc_end);
-  //RooRealVar Par3("Par3","Par3",rmc_end);
-
 
   RooRealVar sigEVal("sigEVal","signal energy", sigE);
   RooGenericPdf sigPdf_g4("sigG4","sigG4","Landau(-x+sigEVal,landauMean,landauVar)",RooArgSet(x,sigEVal,landauMean,landauVar));  
@@ -365,7 +363,6 @@ void RMC_SIG_Model(string element){
   t->SetBranchAddress("Pairep_genTrE",&Pairep_genTrE);
   t->SetBranchAddress("ifPairProdOccurs",&ifPairProdOccurs);
   t->SetBranchAddress("ifPairVertexAtTarget",&ifPairVertexAtTarget);
-  //TH1D* rmc_hist = new TH1D("rmc_hist","rmc_hist", BinNumber, 0, upB-lowB);
 
   int N_pair = t->Draw("Pairep_genTrE","ifPairProdOccurs==1"); 
   int N_VatT = t->Draw("Pairep_genTrE","ifPairProdOccurs==1 && ifPairVertexAtTarget==1"); 
@@ -406,9 +403,11 @@ void RMC_SIG_Model(string element){
   RooPolyFitPdf polyFit("polyFit","polyFit",x,Par0,Par1,Par2);
   polyFit.plotOn(rmcFrame2);
 
-  RooNumConvPdf LandauGaus("landauGaus","landauGaus",x,eLoss,smearPdf);
-  RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
-  poly_detResp.plotOn(rmcFrame2,LineColor(kBlack));
+  RooNumConvPdf LandauGaus("landauGaus","landauGaus",x,eLoss,smearPdf);  
+  //RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
+  //poly_detResp.plotOn(rmcFrame2,LineColor(kBlack));
+  RooPolyFitPdf poly_detResp("polyFit","polyFit",x,Par0,Par1,Par2);  
+
 
   rmcFrame2->Draw();
 
@@ -436,10 +435,6 @@ void RMC_SIG_Model(string element){
     OptWindowMax[i_acc]=Window_ELow+stepSize*itN;
 
     RooAbsReal* isig = sigPdf_detResp.createIntegral(x,NormSet(x),Range("window"));
-
-    //RooAbsReal* irmc_detResp = rmcPdf_detResp.createIntegral(x,NormSet(x),Range("window"));
-    //RooAbsReal* irmc_detResp_Norm = rmcPdf_detResp.createIntegral(x,NormSet(x),Range("Norm"));
-
     RooAbsReal* irmc_detResp = poly_detResp.createIntegral(x,NormSet(x),Range("window"));
     RooAbsReal* irmc_detResp_Norm = poly_detResp.createIntegral(x,NormSet(x),Range("Norm"));
 
@@ -476,8 +471,6 @@ void RMC_SIG_Model(string element){
       opt_winMax=OptWindowMax[opt_Index];
     }
   }
-  //std::cout << "Optimized Acceptance : " << opt_Acceptance << std::endl;
-  //std::cout << "Optimized Acceptance(RMC) : " << opt_Acceptance_RMC << std::endl;
   std::cout << "Optimized Sensitivity: " << opt_Sens << std::endl;
   std::cout << "Optimized SignalWidow: " << opt_winMin << "~" << opt_winMax << std::endl;
 
@@ -514,10 +507,6 @@ void RMC_SIG_Model(string element){
     x.setRange("total",lowerBound.getValV(),upB); 
   }
 
-  //RooAbsReal* irmc_part =rmcPdf_detResp.createIntegral(x,NormSet(x),Range("part"));
-  //RooAbsReal* irmc_total =rmcPdf_detResp.createIntegral(x,NormSet(x),Range("total"));
-  //RooAbsReal* irmc_window =rmcPdf_detResp.createIntegral(x,NormSet(x),Range("window"));
-
   RooAbsReal* irmc_part   = poly_detResp.createIntegral(x,NormSet(x),Range("part"));
   RooAbsReal* irmc_total  = poly_detResp.createIntegral(x,NormSet(x),Range("total"));
   RooAbsReal* irmc_window = poly_detResp.createIntegral(x,NormSet(x),Range("window"));
@@ -526,7 +515,7 @@ void RMC_SIG_Model(string element){
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
   //Double_t muepBr=opt_Sens; 
   Double_t muepBr=TMath::Power(10,-14); 
-  if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
+  if (element=="Al") muepBr=2.05*TMath::Power(10,-13);
   Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
@@ -542,7 +531,6 @@ void RMC_SIG_Model(string element){
   RooPlot* compFrame = x.frame(Title(""));
   compFrame->SetTitle("");
   compData->plotOn(compFrame,Binning(bins));
-  //compPdf.plotOn(compFrame, Components(rmcPdf_detResp), LineStyle(9), LineColor(kBlue));
   compPdf.plotOn(compFrame, Components(poly_detResp), LineStyle(9), LineColor(kBlue));
   compPdf.plotOn(compFrame, LineStyle(kDashed), LineColor(kRed));
 
@@ -656,7 +644,8 @@ void RMC_SIG_Model(string element){
   TCanvas* c6 = new TCanvas("hist","hist",600,600);
   TH1D *h_rmc = new TH1D("hist_rmc","hist_rmc", HistBinNumber ,xAxisMin,xAxisMax);
   TH1D *h_sig = new TH1D("hist_sig","hist_sig", HistBinNumber ,xAxisMin,xAxisMax);
-  
+  if (element=="Al") TGaxis::SetMaxDigits(3);
+
   Double_t bin_start;
   Double_t bin_end;
   Double_t histY_rmc;
@@ -686,12 +675,12 @@ void RMC_SIG_Model(string element){
   st->Draw();
   c6->Update();
 
-  //Double_t yHistMax = c6->GetFrame()->GetY2();
   Double_t yHistMax = gPad->GetUymax();
   TLine *Line_hist = new TLine(opt_winMin, 0,opt_winMin,yHistMax);
   Line_hist->SetLineStyle(kDashed);
   TLatex *latexLine_hist  = new TLatex(opt_winMin, yHistMax*0.7,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
   latexLine_hist->SetTextSize(0.044);
+  yAxisMin=0;
   TLatex *latexLine2_hist  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yHistMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
   latexLine2_hist->SetTextSize(0.047);
 
