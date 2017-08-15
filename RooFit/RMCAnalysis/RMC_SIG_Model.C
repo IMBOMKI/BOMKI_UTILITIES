@@ -48,6 +48,12 @@ using namespace TMath;
 //
 ////////////////////////////////////////////////
 
+Double_t fitf(Double_t *x, Double_t *par)
+{
+  Double_t fitval = par[0]*(pow((par[2]-x[0]),par[1]));
+  return fitval;
+}
+
 std::pair<double,double> FindClosestKey(std::map<double,double> map, double b){
   double key=-1;
   double val;
@@ -65,13 +71,12 @@ std::pair<double,double> FindClosestKey(std::map<double,double> map, double b){
 void RMC_SIG_Model(string element){
   gSystem->Load("RooELossPdf_cxx.so");
   gSystem->Load("RooPolyFitPdf_cxx.so");
-  RooRandom::randomGenerator()->SetSeed(2);  
 
   ////////////////////////////////////////////
   // Set SIG MODEL and Find Momentum Window //
   ////////////////////////////////////////////
 
-  Bool_t ifUseInternalRMC=1;
+  Bool_t ifUseInternalRMC=0;
 
   int A; //Atomic Mass
   Double_t par0;
@@ -92,9 +97,9 @@ void RMC_SIG_Model(string element){
   Double_t TimeFOM;
   Double_t Acceptance;
   Double_t lowB;
-  Double_t upB=120;
-  if (element=="Al") upB=94;
-  //if (element=="Al") upB=120;
+  Double_t upB=120; 
+  //if (element=="Al") upB=94;
+  if (element=="Al") upB=120;
   Double_t ProbGND=0.9;
   Double_t fcap;
   Int_t BinNumber;
@@ -404,9 +409,9 @@ void RMC_SIG_Model(string element){
   polyFit.plotOn(rmcFrame2);
 
   RooNumConvPdf LandauGaus("landauGaus","landauGaus",x,eLoss,smearPdf);  
-  //RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
-  //poly_detResp.plotOn(rmcFrame2,LineColor(kBlack));
-  RooPolyFitPdf poly_detResp("polyFit","polyFit",x,Par0,Par1,Par2);  
+  RooFFTConvPdf poly_detResp("rmcPdf_detResp","rmcPdf_detResp",x,polyFit,LandauGaus);
+  poly_detResp.plotOn(rmcFrame2,LineColor(kBlack));
+  //RooPolyFitPdf poly_detResp("polyFit","polyFit",x,Par0,Par1,Par2);  
 
 
   rmcFrame2->Draw();
@@ -498,13 +503,17 @@ void RMC_SIG_Model(string element){
   /////////////////////////////////////
 
   Int_t rmcNum_part=NumOfStoppedMu*BR_rmc*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
+
+  if (element=="Al") opt_winMax=upB;
+
   x.setRange("part",lowB,opt_winMax);
   x.setRange("total",lowerBound.getValV(),opt_winMax) ;
   x.setRange("window",opt_winMin,opt_winMax);  
 
+
   if (element=="Al"){
-    x.setRange("part",lowB,upB);
-    x.setRange("total",lowerBound.getValV(),upB); 
+    x.setRange("part",lowB,upB-15);
+    x.setRange("total",lowerBound.getValV(),upB-15); 
   }
 
   RooAbsReal* irmc_part   = poly_detResp.createIntegral(x,NormSet(x),Range("part"));
@@ -512,10 +521,20 @@ void RMC_SIG_Model(string element){
   RooAbsReal* irmc_window = poly_detResp.createIntegral(x,NormSet(x),Range("window"));
 
   Int_t rmcNum=rmcNum_part*irmc_total->getVal()/irmc_part->getVal(); // RMC number from lowerBound.getValV() to upB (range of x)
+
+
+  if (element=="Al"){
+    x.setRange("redundant",105,upB);  
+    RooAbsReal* irmc_redundant = poly_detResp.createIntegral(x,NormSet(x),Range("redundant"));
+    Int_t rmcNum_redundant = rmcNum*irmc_redundant->getVal()/irmc_total->getVal();
+    rmcNum = rmcNum+rmcNum_redundant;
+  }
+
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
   //Double_t muepBr=opt_Sens; 
+  RooRandom::randomGenerator()->SetSeed(3);  
   Double_t muepBr=TMath::Power(10,-14); 
-  if (element=="Al") muepBr=2.05*TMath::Power(10,-13);
+  if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
   Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
@@ -588,11 +607,11 @@ void RMC_SIG_Model(string element){
   }
   else if (element=="Al") {
     xAxisMin=90.5;
-    //xAxisMax=94.0;
-    xAxisMax=upB;
+    xAxisMax=96.5;
+    //xAxisMax=upB;
     //yAxisMin=3*Power(10,4);
-    yAxisMin=0;
-    yAxisMax=1.2*Power(10,5);
+    yAxisMin=0*Power(10,5);
+    yAxisMax=2.0*Power(10,5);
   }
   compFrame->GetXaxis()->SetLimits(xAxisMin,xAxisMax);
   compFrame->SetMaximum(yAxisMax);
@@ -681,7 +700,7 @@ void RMC_SIG_Model(string element){
   TLatex *latexLine_hist  = new TLatex(opt_winMin, yHistMax*0.7,Form("  E_{e^{+}}>%.2f MeV",opt_winMin));
   latexLine_hist->SetTextSize(0.044);
   yAxisMin=0;
-  TLatex *latexLine2_hist  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, yAxisMin+(yHistMax-yAxisMin)*0.91,Form("^{%d}"+TString(element),A));
+  TLatex *latexLine2_hist  = new TLatex(xAxisMin+(xAxisMax-xAxisMin)*0.85, (yHistMax)*0.91,Form("^{%d}"+TString(element),A));
   latexLine2_hist->SetTextSize(0.047);
 
   if(element!="Al"){
@@ -694,29 +713,78 @@ void RMC_SIG_Model(string element){
   st->GetYaxis()->SetTitleOffset(1.23) ; 
   st->GetXaxis()->SetTitle("E_{e^{+}} (MeV)");
   st->GetYaxis()->SetTitle("Counts per 0.1 MeV");
+
  
-  ///////////////////////////////
+  ////////////////////////////////
   // RooStats Likelihood Method //
-  ///////////////////////////////
+  ////////////////////////////////
 
   /* Set up Model with ProfileLikelihoodCalculator */
 
   if (element=="Al"){
       
+    //Fitting PolyDetResp 
+    gStyle->SetOptFit(111);
+
+    TF1 *func = new TF1("fitf",fitf,lowerBound.getValV(),upB-15,3); // Same with the range of "total"
+    func->SetParNames("par0","par1","par2");
+    func->SetParLimits(0,0.,1000.);
+    func->SetParLimits(1,0.,1000.);
+    func->SetParLimits(2,95.,upB-15);
+    h_rmc->Fit("fitf","r");
+
+    Double_t p0=func->GetParameter(0);
+    Double_t p1=func->GetParameter(1);
+    Double_t p2=func->GetParameter(2);
+
+    RooRealVar P0("Par0_Al","Par0_Al",p0);
+    RooRealVar P1("Par1_Al","Par1_Al",p1);
+    RooRealVar P2("Par2_Al","Par2_Al",p2);
+
+    Double_t x_Al_start = 90.5;
+    Double_t x_Al_end   = 94.0;
+
+    RooRealVar x_Al("x_Al","x_Al",x_Al_start,x_Al_end);    
+    RooPolyFitPdf polyFit_Al("polyFit_Al","polyFit_Al",x_Al,P0,P1,P2);
+
+    x.setRange("total_Al",x_Al_start,x_Al_end);  
+    RooAbsReal* irmc_total_Al = poly_detResp.createIntegral(x,NormSet(x),Range("total_Al"));
+    Int_t rmcNum_total_Al = rmcNum_part*irmc_total_Al->getVal()/irmc_part->getVal();
+    //rmcNum = rmcNum-rmcNum_redundant;
+    rmcNum=rmcNum_part*irmc_total_Al->getVal()/irmc_part->getVal();
+    RooRealVar sigFrac_Al("sigFrac_Al", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,0.01);
+    
+    RooGenericPdf sigPdf_g4_Al("sigG4","sigG4","Landau(-x_Al+sigEVal,landauMean,landauVar)",RooArgSet(x_Al,sigEVal,landauMean,landauVar));  
+    RooGaussian smearPdf_Al("smear","smear",x_Al,gausMean,gausVar);
+    RooFFTConvPdf sigPdf_detResp_Al("sig_DetResp","sig_DetResp_Al",x_Al,sigPdf_g4_Al,smearPdf_Al);
+    //RooAddPdf compPdf2("comp2", "comp2", RooArgList(sigPdf_detResp_Al, polyFit_Al),sigFrac_Al);    
+    RooAddPdf compPdf2("comp2", "comp2", RooArgList(sigPdf_g4_Al, polyFit_Al),sigFrac_Al);    
+    
+    RooDataSet *compData2=compPdf2.generate(x_Al, (sigNum+rmcNum));
+    Double_t BinNumber_Al=7;
+    RooBinning bins_Al(BinNumber_Al,x_Al_start,x_Al_end);
+
+    TCanvas* c7 = new TCanvas("comp2","comp2", 600,600);
+    RooPlot* compFrame2 = x_Al.frame(Title(""));
+    compFrame2->SetTitle("");
+    compData2->plotOn(compFrame2,Binning(bins_Al));
+    compPdf2.plotOn(compFrame2, Components(polyFit_Al), LineStyle(9), LineColor(kBlue));
+    compPdf2.plotOn(compFrame2, LineStyle(kDashed), LineColor(kRed));
+    compFrame2->Draw();
+    
     ModelConfig model;
     RooWorkspace* wks = new RooWorkspace("wks");
-    wks->import(compPdf);
-    
-    wks->import(*compData, Rename("data"));
+    wks->import(compPdf2);    
+    wks->import(*compData2, Rename("data2"));
     model.SetWorkspace(*wks);
-    model.SetPdf("comp");
+    model.SetPdf("comp2");
     
     ProfileLikelihoodCalculator plc;
-    plc.SetData(*(wks->data("data")));
-    RooRealVar* fsig = wks->var("sigFrac");
+    plc.SetData(*(wks->data("data2")));
+    RooRealVar* fsig = wks->var("sigFrac_Al");
     RooArgSet poi(*fsig);
     RooArgSet *nullParams = (RooArgSet*)poi.snapshot();
-    nullParams->setRealValue("sigFrac",0);
+    nullParams->setRealValue("sigFrac_Al",0);
     
     plc.SetModel(model);
     plc.SetNullParameters(*nullParams);
