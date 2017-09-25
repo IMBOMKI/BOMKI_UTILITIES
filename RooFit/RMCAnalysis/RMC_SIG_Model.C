@@ -76,7 +76,7 @@ void RMC_SIG_Model(string element){
   // Set SIG MODEL and Find Momentum Window //
   ////////////////////////////////////////////
 
-  Bool_t ifUseInternalRMC=1;
+  Bool_t ifUseInternalRMC=0;
 
   int A; //Atomic Mass
   Double_t par0;
@@ -504,6 +504,7 @@ void RMC_SIG_Model(string element){
   /////////////////////////////////////
 
   Int_t rmcNum_part=NumOfStoppedMu*fcap*BR_rmc*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
+  
 
   if (element=="Al") opt_winMax=upB;
 
@@ -522,7 +523,7 @@ void RMC_SIG_Model(string element){
   RooAbsReal* irmc_window = poly_detResp.createIntegral(x,NormSet(x),Range("window"));
 
   Int_t rmcNum=rmcNum_part*irmc_total->getVal()/irmc_part->getVal(); // RMC number from lowerBound.getValV() to upB (range of x)
-
+  if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
 
   if (element=="Al"){
     x.setRange("redundant",105,upB);  
@@ -531,12 +532,12 @@ void RMC_SIG_Model(string element){
     rmcNum = rmcNum+rmcNum_redundant;
   }
 
-  if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
+  
   //Double_t muepBr=opt_Sens; 
-  RooRandom::randomGenerator()->SetSeed(1);  
+  RooRandom::randomGenerator()->SetSeed(2);  
   Double_t muepBr=TMath::Power(10,-14); 
-  if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
-  Int_t sigNum=NumOfStoppedMu*fcap*muepBr*Acceptance; // SIG number
+  if (element=="Al") muepBr=1.7*TMath::Power(10,-12);
+  Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
   RooRealVar rmcFrac("rmcFrac", "Fraction of RMC", Double_t(rmcNum)/(sigNum+rmcNum));
@@ -576,7 +577,7 @@ void RMC_SIG_Model(string element){
   else if (element=="S") {
     xAxisMin=100.5;
     xAxisMax=103.0;
-    yAxisMax=70.0;
+    yAxisMax=80.0;
   }
 
   else if (element=="Ti") {
@@ -607,7 +608,7 @@ void RMC_SIG_Model(string element){
     yAxisMax=20.0;
   }
   else if (element=="Al") {
-    xAxisMin=90.5;
+    xAxisMin=90.4;
     xAxisMax=96.5;
     //xAxisMax=upB;
     //yAxisMin=3*Power(10,4);
