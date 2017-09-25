@@ -76,7 +76,7 @@ void RMC_SIG_Model(string element){
   // Set SIG MODEL and Find Momentum Window //
   ////////////////////////////////////////////
 
-  Bool_t ifUseInternalRMC=0;
+  Bool_t ifUseInternalRMC=1;
 
   int A; //Atomic Mass
   Double_t par0;
@@ -169,6 +169,7 @@ void RMC_SIG_Model(string element){
     par1=3.41745;
     rmc_end=101.34;
     A=27;
+    fcap=0.61;
   }
   else if (element=="S"){
     lmean = 0.338;
@@ -502,7 +503,7 @@ void RMC_SIG_Model(string element){
   // Set Composite Model For Calcium //
   /////////////////////////////////////
 
-  Int_t rmcNum_part=NumOfStoppedMu*BR_rmc*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
+  Int_t rmcNum_part=NumOfStoppedMu*fcap*BR_rmc*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
 
   if (element=="Al") opt_winMax=upB;
 
