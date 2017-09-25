@@ -117,7 +117,7 @@ void RMC_SIG_Model(string element){
   std::map<double, double> BkgToSig; 
 
   // Sensitivity Map
-  std::string fileDir = "/home/bomki/ICEDUST/CyDetTracking/BEOMKI_Tracking/BOMKI_analysis/v999/utilities/Mathematica/";
+  std::string fileDir = "/home/bomki/workspace/BOMKI_UTILITIES/Mathematica/";
   std::string fileNames[4] = {"Integer50.dat","Integer300.dat","Fine.dat","SuperFine.dat"};
   for (int i=0; i<sizeof(fileNames)/sizeof(fileNames[0]); i++){
     std::ifstream file;
@@ -454,7 +454,7 @@ void RMC_SIG_Model(string element){
     std::pair<double,double> pair = FindClosestKey(BkgToSig,b[i_acc]);
     Nup[i_acc] = pair.second;
     Double_t Acceptance = 0.01 * TimeFOM/TimeFOM_Al * SigAcceptance[i_acc]; // * (i_acc+1)*(0.95/N);
-    Sensitivity[i_acc] = Nup[i_acc]/(NumOfStoppedMu*ProbGND*fcap*Acceptance);
+    Sensitivity[i_acc] = Nup[i_acc]/(NumOfStoppedMu*fcap*ProbGND*Acceptance);
   }
 
   int opt_Index;
@@ -533,10 +533,10 @@ void RMC_SIG_Model(string element){
 
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
   //Double_t muepBr=opt_Sens; 
-  RooRandom::randomGenerator()->SetSeed(3);  
+  RooRandom::randomGenerator()->SetSeed(1);  
   Double_t muepBr=TMath::Power(10,-14); 
   if (element=="Al") muepBr=1.7*TMath::Power(10,-13);
-  Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
+  Int_t sigNum=NumOfStoppedMu*fcap*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
   RooRealVar rmcFrac("rmcFrac", "Fraction of RMC", Double_t(rmcNum)/(sigNum+rmcNum));
@@ -570,19 +570,19 @@ void RMC_SIG_Model(string element){
   if (element=="Ca") {
     xAxisMin=100.5;
     xAxisMax=104.5;
-    yAxisMax=50.0;
+    yAxisMax=40.0;
   }
 
   else if (element=="S") {
     xAxisMin=100.5;
-    xAxisMax=103.5;
-    yAxisMax=100.0;
+    xAxisMax=103.0;
+    yAxisMax=70.0;
   }
 
   else if (element=="Ti") {
     xAxisMin=97.5;
     xAxisMax=100.0;
-    yAxisMax=50.0;
+    yAxisMax=40.0;
   }
 
   else if (element=="Fe" || element=="Cr") {
