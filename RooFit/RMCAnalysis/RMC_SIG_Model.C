@@ -71,7 +71,7 @@ void RMC_SIG_Model(string element){
   // Set SIG MODEL and Find Momentum Window //
   ////////////////////////////////////////////
 
-  Bool_t ifUseInternalRMC=0;
+  Bool_t ifUseInternalRMC=1;
 
   Double_t par0;
   Double_t par1;
@@ -159,6 +159,7 @@ void RMC_SIG_Model(string element){
     par0=1.1024*pow(10,-1);
     par1=3.41745;
     rmc_end=101.34;
+    fcap=0.61;
   }
   else if (element=="S"){
     lmean = 0.338;
@@ -473,7 +474,7 @@ void RMC_SIG_Model(string element){
   // Set Composite Model For Calcium //
   /////////////////////////////////////
 
-  Int_t rmcNum_part=NumOfStoppedMu*BR_rmc*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
+  Int_t rmcNum_part=NumOfStoppedMu*BR_rmc*fcap*N_mom/t->GetEntries()*Acceptance; // RMC number from lowB to upB (range of x)
   x.setRange("part",lowB,opt_winMax);
   x.setRange("total",lowerBound.getValV(),opt_winMax) ;
   x.setRange("window",opt_winMin,opt_winMax);  
@@ -494,7 +495,7 @@ void RMC_SIG_Model(string element){
   Int_t rmcNum=rmcNum_part*irmc_total->getVal()/irmc_part->getVal(); // RMC number from lowerBound.getValV() to upB (range of x)
   if (ifUseInternalRMC==1)rmcNum*=2; // Count Internal RMC
   Double_t muepBr=opt_Sens; // Ca40
-  if (element=="Al") muepBr=2.5*TMath::Power(10,-13);
+  if (element=="Al") muepBr=2.0*TMath::Power(10,-13);
   Int_t sigNum=NumOfStoppedMu*muepBr*Acceptance; // SIG number
 
   RooRealVar sigFrac("sigFrac", "Fraction of RMC", Double_t(sigNum)/(sigNum+rmcNum),0.,1.);
