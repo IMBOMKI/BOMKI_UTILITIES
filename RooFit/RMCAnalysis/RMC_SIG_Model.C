@@ -437,7 +437,7 @@ void RMC_SIG_Model(string element){
     std::cout << "Lower Bound of E-Window: " << Window_ELow << std::endl;
     std::cout << "Signal Acceptance in Momentum Window: " << SigAcceptance[i_acc] << std::endl;
     std::cout << "RMC Acceptance in Momentum Window: " << RMCAcceptance[i_acc] << std::endl;    
-    b[i_acc] = NumOfStoppedMu*BR_rmc*N_mom/t->GetEntries()*Acceptance*RMCAcceptance[i_acc];
+    b[i_acc] = NumOfStoppedMu*fcap*BR_rmc*N_mom/t->GetEntries()*Acceptance*RMCAcceptance[i_acc];
     if (ifUseInternalRMC==1) b[i_acc]*=2;
     std::pair<double,double> pair = FindClosestKey(BkgToSig,b[i_acc]);
     Nup[i_acc] = pair.second;
