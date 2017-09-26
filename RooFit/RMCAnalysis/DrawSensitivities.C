@@ -24,14 +24,17 @@ void DrawSensitivities(){
   //Double_t Ge = 6.11824*Power(10,-15);
 
   // Include Internal
-  Double_t S  = 1.10766*Power(10,-15); // Z=16
+  //Double_t S  = 1.10766*Power(10,-15); // Z=16
+  Double_t S  = 1.00695*Power(10,-15); // Z=16
   Double_t Ca = 7.91461*Power(10,-16); // Z=20
-  Double_t Ti = 2.15718*Power(10,-15); // Z=22
+  //Double_t Ti = 2.15718*Power(10,-15); // Z=22
+  Double_t Ti = 2.07354*Power(10,-15); // Z=22
   Double_t Cr = 1.68553*Power(10,-15); // Z=24
   Double_t Fe = 2.59838*Power(10,-15); // Z=26
   Double_t Ni = 6.38783*Power(10,-15); // Z=28
   Double_t Zn = 5.59349*Power(10,-15); // Z=30
-  Double_t Ge = 5.40889*Power(10,-15); // Z=32
+  //Double_t Ge = 5.40889*Power(10,-15); // Z=32
+  Double_t Ge = 5.37784*Power(10,-15); // Z=32
 
   const Int_t n = 8;
   Double_t Z[8]   = {16,20,22,24,26,28,30,32};
